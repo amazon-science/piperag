@@ -1,0 +1,52 @@
+=== Running config set: wikipedia_eval_c4_to_999 ===
+
+======================
+no retrieval
+test_dataset_spec : $WORKSPACE/data/datasets/val_wikipedia/val_wikipedia_chunk9_1K/val_db_c4_to_999.json
+num_neighbours : 2
+num_continuation_chunks : 1
+staleness : 0
+remove_stale_context : 0
+max_len : 512
+no_retrieval : 1
+retrieval_interval : 64
+exp_name : no retrieval
+Executing:  python evaluate_retro_realtime_retrieval.py  --test-dataset-spec $WORKSPACE/data/datasets/val_wikipedia/val_wikipedia_chunk9_1K/val_db_c4_to_999.json --num-neighbours 2 --max-len 512 --num-continuation-chunks 1 --staleness 0 --no-retrieval 1 --retrieval-interval 64 --checkpoint $WORKSPACE/data/model/model.ckpt --retro-config $WORKSPACE/data/model/retro.json --batch-size 16 --gpus-per-node 1 --num-nodes 1 --num-workers 16 > /tmp/out
+test_loss: 2.78
+perplexity: 16.30
+======================
+
+
+======================
+retrieval no stale
+test_dataset_spec : $WORKSPACE/data/datasets/val_wikipedia/val_wikipedia_chunk9_1K/val_db_c4_to_999.json
+num_neighbours : 2
+num_continuation_chunks : 1
+staleness : 0
+remove_stale_context : 0
+max_len : 512
+no_retrieval : 0
+retrieval_interval : 64
+exp_name : retrieval no stale
+Executing:  python evaluate_retro_realtime_retrieval.py  --test-dataset-spec $WORKSPACE/data/datasets/val_wikipedia/val_wikipedia_chunk9_1K/val_db_c4_to_999.json --num-neighbours 2 --max-len 512 --num-continuation-chunks 1 --staleness 0 --no-retrieval 0 --retrieval-interval 64 --checkpoint $WORKSPACE/data/model/model.ckpt --retro-config $WORKSPACE/data/model/retro.json --batch-size 16 --gpus-per-node 1 --num-nodes 1 --num-workers 16 > /tmp/out
+test_loss: 2.58
+perplexity: 13.35
+======================
+
+
+======================
+retrieval with stale, continuation = 1, shift to exclude the stale context
+test_dataset_spec : $WORKSPACE/data/datasets/val_wikipedia/val_wikipedia_chunk9_1K/val_db_c4_to_999.json
+num_neighbours : 2
+num_continuation_chunks : 1
+staleness : 1
+remove_stale_context : 1
+max_len : 512
+no_retrieval : 0
+retrieval_interval : 64
+exp_name : retrieval with stale, continuation = 1, shift to exclude the stale context
+Executing:  python evaluate_retro_realtime_retrieval.py  --test-dataset-spec $WORKSPACE/data/datasets/val_wikipedia/val_wikipedia_chunk9_1K/val_db_c4_to_999.json --num-neighbours 2 --max-len 512 --num-continuation-chunks 1 --staleness 1 --remove_stale_context 1 --no-retrieval 0 --retrieval-interval 64 --checkpoint $WORKSPACE/data/model/model.ckpt --retro-config $WORKSPACE/data/model/retro.json --batch-size 16 --gpus-per-node 1 --num-nodes 1 --num-workers 16 > /tmp/out
+test_loss: 2.60
+perplexity: 13.58
+======================
+
