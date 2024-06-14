@@ -1,0 +1,42 @@
+// Usage: In working dir:
+//   python -m grpc_tools.protoc -I./proto --python_out=. --pyi_out=. --grpc_python_out=. ./proto/retrieval.proto 
+
+syntax = "proto3";
+
+package retrieval;
+
+// The service definition.
+service RetrievalService {
+  // Sends a greeting
+  rpc Retrieve (RetrievalRequest) returns (RetrievalReply) {}
+  rpc SetNprobe (SetNprobeRequest) returns (SetNprobeReply) {}
+}
+
+// The request message containing a batch of queries
+message RetrievalRequest {
+  // paramters used for retrieval
+  repeated string query = 1; // a list of queries, each is a string with 64 tokens
+  int32 num_continuation_chunks = 2; // number of continuation chunks (default 1)
+  int32 num_neighbours = 3; // number of neighbours to return (default 2)
+  int32 staleness_offset = 4; // number of staleness tokens, e.g., 64, 32, etc.
+
+  // parameters used for performance modeling
+  int32 seq_len = 5;  // current generated sequence length, 
+  int32 interval = 6;  // retrieval interval
+  bool use_perf_model = 7; // True = use performance model to set nprobe; False = use default nprobe
+}
+
+// The response message containing a batch of results
+message RetrievalReply {
+  // a list of results, with tokens in flat shape:  
+  //   neighbors shape -> batch, num chunks == 1, num neighbours, neighbour len
+  repeated int32 retrieved_tokens = 1; 
+}
+
+message SetNprobeRequest {
+  int32 nprobe = 1; 
+}
+
+message SetNprobeReply {
+  string reply = 1; 
+}
